@@ -7,8 +7,8 @@ trait ICounter<T> {
 
 #[starknet::contract]
 mod CounterContract {
-    use starknet::ContractAddress;
     use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
+    use starknet::{ContractAddress, get_caller_address};
     use super::ICounter;
 
     #[event]
@@ -19,6 +19,7 @@ mod CounterContract {
 
     #[derive(Drop, starknet::Event)]
     struct CounterChanged {
+        #[key]
         caller: ContractAddress,
         new_value: u32,
         old_value: u32,
@@ -29,6 +30,8 @@ mod CounterContract {
     enum ChangeReason {
         Incremented,
         Decremented,
+        Reset,
+        Set,
     }
 
     #[storage]
@@ -45,6 +48,7 @@ mod CounterContract {
         fn get_counter(self: @ContractState) -> u32 {
             self.counter.read()
         }
+
         fn increment(ref self: ContractState) {
             let current_value = self.counter.read();
             self.counter.write(current_value + 1);
@@ -52,7 +56,7 @@ mod CounterContract {
                 .emit(
                     Event::CounterChanged(
                         CounterChanged {
-                            caller: starknet::get_caller_address(),
+                            caller: get_caller_address(),
                             new_value: current_value + 1,
                             old_value: current_value,
                             reason: ChangeReason::Incremented,
@@ -60,10 +64,22 @@ mod CounterContract {
                     ),
                 );
         }
+
         fn decrement(ref self: ContractState) {
             let current_value = self.counter.read();
             assert!(current_value > 0, "Counter cannot be negative");
             self.counter.write(current_value - 1);
+            self
+                .emit(
+                    Event::CounterChanged(
+                        CounterChanged {
+                            caller: get_caller_address(),
+                            new_value: current_value - 1,
+                            old_value: current_value,
+                            reason: ChangeReason::Decremented,
+                        },
+                    ),
+                );
         }
     }
 }

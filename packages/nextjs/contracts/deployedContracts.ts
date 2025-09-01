@@ -7,7 +7,7 @@ const deployedContracts = {
   devnet: {
     CounterContract: {
       address:
-        "0x185e1cd41a8568136c3f6cfff67c0488dcdf8bb6ce6428312b49d80dafc6eec",
+        "0x103ec22ec2980bdf796c3f59b2ac05444338a613fa50d5e2faf91ce28bc6c29",
       abi: [
         {
           type: "impl",
@@ -46,14 +46,69 @@ const deployedContracts = {
           ],
         },
         {
+          type: "enum",
+          name: "contracts::counter::CounterContract::ChangeReason",
+          variants: [
+            {
+              name: "Incremented",
+              type: "()",
+            },
+            {
+              name: "Decremented",
+              type: "()",
+            },
+            {
+              name: "Reset",
+              type: "()",
+            },
+            {
+              name: "Set",
+              type: "()",
+            },
+          ],
+        },
+        {
+          type: "event",
+          name: "contracts::counter::CounterContract::CounterChanged",
+          kind: "struct",
+          members: [
+            {
+              name: "caller",
+              type: "core::starknet::contract_address::ContractAddress",
+              kind: "key",
+            },
+            {
+              name: "new_value",
+              type: "core::integer::u32",
+              kind: "data",
+            },
+            {
+              name: "old_value",
+              type: "core::integer::u32",
+              kind: "data",
+            },
+            {
+              name: "reason",
+              type: "contracts::counter::CounterContract::ChangeReason",
+              kind: "data",
+            },
+          ],
+        },
+        {
           type: "event",
           name: "contracts::counter::CounterContract::Event",
           kind: "enum",
-          variants: [],
+          variants: [
+            {
+              name: "CounterChanged",
+              type: "contracts::counter::CounterContract::CounterChanged",
+              kind: "nested",
+            },
+          ],
         },
       ],
       classHash:
-        "0x6133c2ad72e1889b53c74a5de985f8a339f73f167b09c392003e60f347ff58d",
+        "0x5e7a3df6aeb921110774eba91dbeccac66dff7e0aaaf6e0e4fcc1355cd1891c",
     },
   },
 } as const;
