@@ -7,7 +7,7 @@ const deployedContracts = {
   devnet: {
     CounterContract: {
       address:
-        "0x46f2607c201aa7acb68341bcef47af616934c89c400c9bab75c9790185eb699",
+        "0x63bd4f90bec8766e12eaa56506a4bfa618db8674f668bd3968ddf3c91cadbd5",
       abi: [
         {
           type: "impl",
@@ -55,6 +55,13 @@ const deployedContracts = {
               outputs: [],
               state_mutability: "external",
             },
+            {
+              type: "function",
+              name: "reset",
+              inputs: [],
+              outputs: [],
+              state_mutability: "external",
+            },
           ],
         },
         {
@@ -95,6 +102,20 @@ const deployedContracts = {
               inputs: [],
               outputs: [],
               state_mutability: "external",
+            },
+          ],
+        },
+        {
+          type: "constructor",
+          name: "constructor",
+          inputs: [
+            {
+              name: "initial_value",
+              type: "core::integer::u32",
+            },
+            {
+              name: "owner",
+              type: "core::starknet::contract_address::ContractAddress",
             },
           ],
         },
@@ -217,7 +238,7 @@ const deployedContracts = {
         },
       ],
       classHash:
-        "0x18da03a68e2a258523cf65e5edc11c3c9f356af35f0a93fbf0e9a472df676e3",
+        "0x57305f7a8846bb7a6fc073f6294ab326912aabb4b5e7f9bb91182c42cfe5497",
     },
   },
 } as const;
