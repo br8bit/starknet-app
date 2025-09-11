@@ -55,8 +55,6 @@ export const Address = ({
   const checkSumAddress = useMemo(() => {
     if (!address) return "";
 
-    console.log("Address:", address);
-
     if (address.toLowerCase() === "0x") {
       return "0x0";
     }
