@@ -18,7 +18,7 @@ import { default as NextImage } from "next/image";
 import CopyToClipboard from "react-copy-to-clipboard";
 
 type AddressProps = {
-  address?: AddressType;
+  address?: AddressType | string;
   disableAddressLink?: boolean;
   format?: "short" | "long";
   profile?: StarkProfile;
