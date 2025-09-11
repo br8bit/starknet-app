@@ -53,7 +53,9 @@ export const Address = ({
   const { targetNetwork } = useTargetNetwork();
 
   const checkSumAddress = useMemo(() => {
-    if (!address) return undefined;
+    if (!address) return "";
+
+    console.log("Address:", address);
 
     if (address.toLowerCase() === "0x") {
       return "0x0";
