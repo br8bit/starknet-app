@@ -1,6 +1,6 @@
 {
   "name": "Scaffold Stark",
-  "image": "docker.io/starknetfoundation/starknet-dev:2.11.4",
+  "image": "docker.io/starknetfoundation/starknet-dev:2.12.0",
   "runArgs": ["--name", "starknet-dev"],
   "customizations": {
     "vscode": {
