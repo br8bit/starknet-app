@@ -1,5 +1,5 @@
 #[starknet::interface]
-trait ICounter<T> {
+pub trait ICounter<T> {
     fn get_counter(self: @T) -> u32;
     fn increment(ref self: T);
     fn decrement(ref self: T);
@@ -8,11 +8,13 @@ trait ICounter<T> {
 }
 
 #[starknet::contract]
-mod CounterContract {
+pub mod CounterContract {
     use openzeppelin_access::ownable::OwnableComponent;
     use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
     use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
+    use crate::constants::STRK_CONTRACT;
+    use crate::utils::strk_to_fri;
     use super::ICounter;
 
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
@@ -24,23 +26,23 @@ mod CounterContract {
 
     #[event]
     #[derive(Drop, starknet::Event)]
-    enum Event {
+    pub enum Event {
         CounterChanged: CounterChanged,
         #[flat]
         OwnableEvent: OwnableComponent::Event,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct CounterChanged {
+    pub struct CounterChanged {
         #[key]
-        caller: ContractAddress,
-        new_value: u32,
-        old_value: u32,
-        reason: ChangeReason,
+        pub caller: ContractAddress,
+        pub new_value: u32,
+        pub old_value: u32,
+        pub reason: ChangeReason,
     }
 
     #[derive(Drop, Copy, Serde)]
-    enum ChangeReason {
+    pub enum ChangeReason {
         Incremented,
         Decremented,
         Reset,
@@ -117,11 +119,8 @@ mod CounterContract {
         }
 
         fn reset(ref self: ContractState) {
-            let token: ContractAddress =
-                0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d
-                .try_into()
-                .unwrap();
-            let payment_amount: u256 = 1_000_000_000_000_000_000; // 1 starknet
+            let token: ContractAddress = STRK_CONTRACT;
+            let payment_amount: u256 = strk_to_fri(1); // 1 starknet
             let caller = get_caller_address();
             let contract_address = get_contract_address();
             let dispatcher = IERC20Dispatcher { contract_address: token };
